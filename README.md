@@ -24,6 +24,14 @@
 
 ---
 
+### 📥 下载编译好的程序 (Recommended)
+如果您不想安装 Go 环境，可以直接在 [Releases](https://github.com/AirSign-TRX/AirSign-TRX/releases) 页面下载对应系统的压缩包：
+* **Windows**: `AirSign-TRX_Win.zip`
+* **macOS**: `AirSign-TRX_Mac.zip` (支持 M1/M2/M3)
+* **Linux**: `AirSign-TRX_Linux.tar.gz`
+
+---
+
 ## 🚀 快速开始 (Quick Start)
 
 ### 1. 编译 (Build)
@@ -34,10 +42,21 @@
 # 1. 克隆项目
 git clone https://github.com/AirSign-TRX/AirSign-TRX.git
 cd AirSign-TRX
+```
+**或者**
+```bash
+# 1. GitHub CLI 克隆项目
+如果您安装了 GitHub 官方命令行工具，只需输入：
+gh repo clone Vance-Lo/AirSign-TRX
+```
 
-# 2. 编译联网端 (Bridge)
+```bash
+# 2. 安装并整理依赖 (必须执行) [cite: 2026-02-17]
+go mod tidy [cite: 2026-02-17]
+```
+```bash
+# 3. 编译联网端 (Bridge)
 go build -o bin/bridge ./cmd/bridge
-
 # 3. 编译断网端 (Vault)
 go build -o bin/vault ./cmd/vault
 ```
@@ -89,7 +108,10 @@ AirSign-TRX/
 │   └── vault/       # 断网端源码 (Cold Vault)
 ├── go.mod           # 模块依赖管理
 ├── LICENSE          # MIT 开源协议
-└── README.md        # 项目说明文档
+├── README.md        # 项目说明文档
+├── build.sh         # 自动化脚本 
+├── SOP.md           # 离线操作指南 
+└── VERIFY.md        # 校验命令速查 
 ```
 ---
 
