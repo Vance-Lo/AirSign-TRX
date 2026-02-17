@@ -1,0 +1,111 @@
+# AirSign-TRX: Air-Gapped Cold Wallet for TRON
+
+> 🛡️ **Zero-Knowledge, Sharded Key, Air-Gapped Transaction Signing.**
+
+![Go Version](https://img.shields.io/badge/Go-1.16%2B-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Author](https://img.shields.io/badge/dev-Vance%20Lo-orange)
+
+**AirSign-TRX** 是一套极简主义的波场（TRON）冷钱包解决方案。它严格遵循**私钥不触网**原则，利用 Shamir's Secret Sharing (SSS) 技术将私钥粉碎为多份分片，确保资产的极致安全与可继承性。
+
+**Developer**: Vance Lo  
+**Contact**: vance.dev@proton.me  
+**Website**: [vancelo.com](https://vancelo.com)
+
+---
+
+## 🌟 核心特性 (Features)
+
+* **⚡️ 物理隔离 (Air-Gapped)**: 
+    * **Vault (冷端)**: 运行在断网电脑上，负责维护私钥和签名 [cite: 2026-01-17]。
+    * **Bridge (热端)**: 运行在联网电脑上，负责生成订单和广播交易 [cite: 2026-01-17]。
+* **🧩 SSS 分片技术**: 私钥生成后即被拆分为 5 份（3/5 门限），任何单一物理介质丢失都不会导致资产失窃。
+* **🛡️ 字节级签名**: 采用 SHA256 原始字节提取算法，解决 Protobuf 跨平台序列化哈希不一致问题，杜绝盲签风险。
+* **👁️ 智能反欺诈**: 冷端在签名时自动解析交易内容，直观显示收款地址与金额，防止木马篡改交易。
+* **💵 全币种支持**: 原生支持 TRX 转账及 USDT (TRC20) 合约调用。
+
+---
+
+## 🚀 快速开始 (Quick Start)
+
+### 1. 编译 (Build)
+
+你需要安装 Go 1.16+ 环境。
+
+# 1. 克隆项目
+git clone [https://github.com/AirSign-TRX/AirSign-TRX.git](https://github.com/AirSign-TRX/AirSign-TRX.git)
+cd AirSign-TRX
+
+# 2. 编译联网端 (Bridge)
+go build -o bin/bridge ./cmd/bridge
+
+# 3. 编译断网端 (Vault)
+go build -o bin/vault ./cmd/vault
+
+### 2. 初始化 (Setup)
+准备两个 U 盘：冷盘 (Key USB) 和 热盘 (Transfer USB)。
+
+将 bin/vault 复制到 断网电脑。
+
+将 bin/bridge 留在 联网电脑。
+
+📖 使用手册 (SOP)
+阶段一：创建金库 (仅需一次)
+在 断网电脑 运行 vault。
+
+选择 [1] 拆分私钥。
+
+输入你的 64位 Hex 私钥。
+
+程序生成 5 个 .key 文件。请务必将它们分散存储在不同的物理位置（如 U 盘、保险柜、纸质抄写）。
+
+注意：完成后建议重启断网电脑以清空内存。
+
+阶段二：日常转账 / 资产提取
+这是一个 "联网填单 -> 断网盖章 -> 联网发信" 的过程。
+
+1. 生成订单 (联网端)
+运行 bridge。
+
+选择 [2] TRX 或 [3] USDT 转账。
+
+输入发款地址、收款地址、金额。
+
+生成 request.txt (有效期 12 小时)。
+
+动作: 将 request.txt 拷入 热盘 U 盘。
+
+2. 离线签名 (断网端)
+插入 热盘 U 盘 和 冷盘 U 盘 (包含至少 3 个分片)。
+
+运行 vault，选择 [4] 全自动文件签名。
+
+核对: 屏幕会显示交易详情和发款人地址。确认无误后输入 y。
+
+生成 signed.txt。
+
+动作: 将 signed.txt 拷回 热盘 U 盘。
+
+3. 广播交易 (联网端)
+将 热盘 U 盘 插回联网电脑。
+
+运行 bridge，选择 [4] 广播交易。
+
+交易上链，资金到账。
+
+📂 目录结构
+AirSign-TRX/
+├── cmd/
+│   ├── bridge/      # 联网端源码：负责与波场节点交互
+│   └── vault/       # 断网端源码：负责 SSS 计算与冷签名
+├── go.mod           # 依赖管理
+├── LICENSE          # MIT 许可证
+└── README.md        # 说明文档
+⚠️ 免责声明 (Disclaimer)
+本软件按“原样”提供，不提供任何形式的明示或暗示保证。作者不对因使用本软件而导致的资金丢失、私钥泄露或交易失败承担任何责任。
+
+请务必在小额测试通过后再进行大额资产管理。
+
+请务必保管好您的物理分片文件。
+
+严禁在联网设备上运行 Vault 程序。
+
+Copyright © 2026 Vance Lo. All rights reserved.
