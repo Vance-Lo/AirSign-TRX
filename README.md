@@ -25,7 +25,7 @@
 ---
 
 ### 📥 下载编译好的程序 (Recommended)
-如果您不想安装 Go 环境，可以直接在 [Releases](https://github.com/AirSign-TRX/AirSign-TRX/releases) 页面下载对应系统的压缩包：
+如果您不想安装 Go 环境，可以直接在 [Releases](https://github.com/Vance-Lo/AirSign-TRX/releases/) 页面下载对应系统的压缩包：
 * **Windows**: `AirSign-TRX_Win.zip`
 * **macOS**: `AirSign-TRX_Mac.zip` (支持 M1/M2/M3)
 * **Linux**: `AirSign-TRX_Linux.tar.gz`
